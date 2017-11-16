@@ -3,7 +3,7 @@ text = gets.chomp!
 puts "Enter shift factor:"
 shiftfactor = gets.chomp!.to_i
 
-def cypher(string, shift)
+def cipher(string, shift)
   #initialize letter arrays
   letters = ('a'..'z').to_a
   cap_letters = ('A'..'Z').to_a
@@ -24,5 +24,5 @@ def cypher(string, shift)
   end
 end
 
-#call cypher
-cypher(text, shiftfactor)
+#call cipher
+cipher(text, shiftfactor)
