@@ -3,18 +3,17 @@ module CustomEnum
 
   #my take on .each()
   def my_each(&block)
-    i = 0
-    until i == self.length
-      yield(self[i])
-      i += 1
+    for item in self
+      yield(item)
     end
     self
   end
 
+  #my take on .each_with_index()
   def my_each_with_index(&block)
     i = 0
-    until i == self.length
-      yield(self[i], i)
+    for item in self
+      yield(item, i)
       i += 1
     end
     self
@@ -28,6 +27,14 @@ include CustomEnum
 #test variables
 array = [5,6,7,8]
 stringarray = ["hello","my","name","is","Feythelus"]
+hashlist = {"name" => "Feythelus", age: 100, 1234 => "one,two,three,four"}
+
+#array.my_each_with_index {|item, index| print "#{item}, #{index}     "}
+#hashlist.my_each_with_index {|key, val, index| print "#{key}, #{val}, #{index}   "}
+
+#hashlist.each_with_index {|key, val, index| print "#{key}, #{val}, #{index}   "}
+#array.each_with_index {|item, index| print "#{item},#{index}    "}
+
 
 =begin
 #my enum for .each()
