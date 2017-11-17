@@ -29,7 +29,7 @@ module CustomEnum
     make
   end
 
-  #my take on .all?() using .my_each from above and ternary operator
+  #my take on .all?() using .my_each() from above and ternary
   def my_all?(&block)
     i = 0
     self.my_each do |item|
@@ -38,6 +38,14 @@ module CustomEnum
     i == self.length ? true : false
   end
 
+  #my take on .any?() using .my_each() from above and ternary, similar to my_all?()
+  def my_any?(&block)
+    i = 0
+    self.my_each do |item|
+      i += 1 if yield(item) == true
+    end
+    i > 1 ? true : false
+  end
 
 end
 
@@ -49,8 +57,8 @@ array = [5,6,7,8]
 stringarray = ["hello","my","name","is","Feythelus"]
 hashlist = {"name" => "Feythelus", age: 100, 1234 => "one,two,three,four"}
 
-array.my_all? {|item| item > 1} #returns true
-array.my_all? {|item| item > 100} #returns false
+array.my_any? {|item| item > 1} #returns true
+array.my_any? {|item| item > 100} #returns false
 
 #array.my_each_with_index {|item, index| print "#{item}, #{index}     "}
 #hashlist.my_each_with_index {|key, val, index| print "#{key}, #{val}, #{index}   "}
@@ -71,4 +79,3 @@ array.each {|item| puts item}
 stringarray.my_each_with_index {|item, index| puts "#{item}, #{index}"}
 #Ruby's built in enum
 stringarray.each_with_index {|item, index| puts "#{item}, #{index}"}
-=end
