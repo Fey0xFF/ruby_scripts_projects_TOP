@@ -29,6 +29,15 @@ module CustomEnum
     make
   end
 
+  #my take on .all?() using .my_each from above and ternary operator
+  def my_all?(&block)
+    i = 0
+    self.my_each do |item|
+      i += 1 if yield(item) == true
+    end
+    i == self.length ? true : false
+  end
+
 
 end
 
@@ -40,8 +49,8 @@ array = [5,6,7,8]
 stringarray = ["hello","my","name","is","Feythelus"]
 hashlist = {"name" => "Feythelus", age: 100, 1234 => "one,two,three,four"}
 
-newarray = array.my_select {|item| item > 6}
-print newarray
+array.my_all? {|item| item > 1} #returns true
+array.my_all? {|item| item > 100} #returns false
 
 #array.my_each_with_index {|item, index| print "#{item}, #{index}     "}
 #hashlist.my_each_with_index {|key, val, index| print "#{key}, #{val}, #{index}   "}
