@@ -67,6 +67,17 @@ module CustomEnum
     return i
   end
 
+  #my take on .map() returns true or false based on block condition to new array or hash
+  def my_map(&block)
+    make = [] if self.class == Array
+    make = {} if self.class == Hash
+    self.my_each do |item|
+      yield(item) ? make.push(true) : make.push(false)
+    end
+    make
+  end
+
+
 end
 
 #include the CustomEnum module
@@ -77,8 +88,12 @@ array = [5,6,7,8]
 stringarray = ["hello","my","name","is","Feythelus"]
 hashlist = {"name" => "Feythelus", age: 100, 1234 => "one,two,three,four"}
 
-array.my_count
-hashlist.my_count
+
+newarray = array.my_map {|item| item > 6}
+print newarray
+
+#array.my_map {|item| item > 5}
+#hashlist.my_count
 #print array.my_count {|item| item > 6} #returns false
 #print array.my_count {|item| item > 100} #returns true
 
