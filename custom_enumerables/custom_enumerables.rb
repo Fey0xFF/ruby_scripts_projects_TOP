@@ -77,8 +77,19 @@ module CustomEnum
     make
   end
 
+  #my take on .inject() returns accumulator or string comparator block result
+  def my_inject(accum = self[0])
+    accum ||= []
+    #-------catch [],{} and reset-----
+    accum = 0 if accum.class == Fixnum
+    self.my_each do |item|
+      accum = yield(accum, item)
+    end
+    accum
+  end
 
 end
+
 
 #include the CustomEnum module
 include CustomEnum
@@ -88,9 +99,10 @@ array = [5,6,7,8]
 stringarray = ["hello","my","name","is","Feythelus"]
 hashlist = {"name" => "Feythelus", age: 100, 1234 => "one,two,three,four"}
 
+print array.my_inject {|sum, item| sum + item} #returns 26
+print stringarray.my_inject {|memo, string| memo.length > string.length ? memo : string} #returns "Feythelus"
+print hashlist.my_inject {|memo, string| memo.length > string.length ? memo : string} #returns [1234,"one,two,three,four"]
 
-newarray = array.my_map {|item| item > 6}
-print newarray
 
 #array.my_map {|item| item > 5}
 #hashlist.my_count
