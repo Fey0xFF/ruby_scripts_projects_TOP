@@ -56,6 +56,17 @@ module CustomEnum
     i > 1 ? false : true
   end
 
+
+  #my take on .count() returns number of times block condition is met, otherwise returns count of items in array or hash
+  def my_count(&block)
+    return self.length if block_given? == false
+    i = 0
+    self.my_each do |item|
+      i += 1 if yield(item) == true
+    end
+    return i
+  end
+
 end
 
 #include the CustomEnum module
@@ -66,8 +77,10 @@ array = [5,6,7,8]
 stringarray = ["hello","my","name","is","Feythelus"]
 hashlist = {"name" => "Feythelus", age: 100, 1234 => "one,two,three,four"}
 
-print array.my_none? {|item| item > 1} #returns false
-print array.my_none? {|item| item > 100} #returns true
+array.my_count
+hashlist.my_count
+#print array.my_count {|item| item > 6} #returns false
+#print array.my_count {|item| item > 100} #returns true
 
 #array.my_each_with_index {|item, index| print "#{item}, #{index}     "}
 #hashlist.my_each_with_index {|key, val, index| print "#{key}, #{val}, #{index}   "}
