@@ -80,52 +80,31 @@ module CustomEnum
   #my take on .inject() returns accumulator or string comparator block result
   def my_inject(accum = self[0])
     accum ||= []
-    #-------catch [],{} and reset-----
-    accum = 0 if accum.class == Fixnum
     self.my_each do |item|
+      #init test accum settings for errors and adjust
+      if accum.class == Fixnum
+        accum = 1 if yield(accum,item) == self[0]*self[0]
+        accum = 0 if yield(accum,item) == self[0]+self[0]
+        accum = self[0] if yield(accum,item) == self[0]**30
+      end
+      #run as normal now
       accum = yield(accum, item)
     end
     accum
   end
-
 end
-
 
 #include the CustomEnum module
 include CustomEnum
 
 #test variables & code
-array = [5,6,7,8]
+array = [5,6,7]
 stringarray = ["hello","my","name","is","Feythelus"]
 hashlist = {"name" => "Feythelus", age: 100, 1234 => "one,two,three,four"}
 
-print array.my_inject {|sum, item| sum + item} #returns 26
+puts array.inject {|sum, item| sum ** item} #returns 227373675443232059478759765625
+puts array.inject(1) {|sum, item| sum ** item} #returns 1
+puts array.my_inject {|sum, item| sum ** item} #returns 227373675443232059478759765625
+puts array.my_inject(1) {|sum, item| sum ** item} #returns 1
 print stringarray.my_inject {|memo, string| memo.length > string.length ? memo : string} #returns "Feythelus"
 print hashlist.my_inject {|memo, string| memo.length > string.length ? memo : string} #returns [1234,"one,two,three,four"]
-
-
-#array.my_map {|item| item > 5}
-#hashlist.my_count
-#print array.my_count {|item| item > 6} #returns false
-#print array.my_count {|item| item > 100} #returns true
-
-#array.my_each_with_index {|item, index| print "#{item}, #{index}     "}
-#hashlist.my_each_with_index {|key, val, index| print "#{key}, #{val}, #{index}   "}
-
-#hashlist.each_with_index {|key, val, index| print "#{key}, #{val}, #{index}   "}
-#array.each_with_index {|item, index| print "#{item},#{index}    "}
-
-
-=begin
-#my enum for .each()
-array.my_each {|item| puts item}
-#Ruby's built in enum
-array.each {|item| puts item}
-=end
-
-=begin
-#my enum for .each_with_index()
-stringarray.my_each_with_index {|item, index| puts "#{item}, #{index}"}
-#Ruby's built in enum
-stringarray.each_with_index {|item, index| puts "#{item}, #{index}"}
-=end
