@@ -68,11 +68,19 @@ module CustomEnum
   end
 
   #my take on .map() returns true or false based on block condition to new array or hash
-  def my_map(&block)
+  def my_map(procblock = nil)
+    #set newarray to array or hash based on self
     make = [] if self.class == Array
     make = {} if self.class == Hash
-    self.my_each do |item|
-      yield(item) ? make.push(true) : make.push(false)
+    #check for proc or block
+    if procblock
+      for item in self
+        make.push(procblock.call(item))
+      end
+    else
+      self.my_each do |item|
+        yield(item) ? make.push(true) : make.push(false)
+      end
     end
     make
   end
@@ -101,10 +109,18 @@ include CustomEnum
 array = [5,6,7]
 stringarray = ["hello","my","name","is","Feythelus"]
 hashlist = {"name" => "Feythelus", age: 100, 1234 => "one,two,three,four"}
+testproc = Proc.new do |item|
+  item.class
+end
 
-puts array.inject {|sum, item| sum ** item} #returns 227373675443232059478759765625
-puts array.inject(1) {|sum, item| sum ** item} #returns 1
-puts array.my_inject {|sum, item| sum ** item} #returns 227373675443232059478759765625
-puts array.my_inject(1) {|sum, item| sum ** item} #returns 1
-print stringarray.my_inject {|memo, string| memo.length > string.length ? memo : string} #returns "Feythelus"
-print hashlist.my_inject {|memo, string| memo.length > string.length ? memo : string} #returns [1234,"one,two,three,four"]
+newarray = array.my_map(testproc)
+print newarray
+newarray = array.my_map {|item| item > 1}
+print newarray
+
+#puts array.inject {|sum, item| sum ** item} #returns 227373675443232059478759765625
+#puts array.inject(1) {|sum, item| sum ** item} #returns 1
+#puts array.my_inject {|sum, item| sum ** item} #returns 227373675443232059478759765625
+#puts array.my_inject(1) {|sum, item| sum ** item} #returns 1
+#print stringarray.my_inject {|memo, string| memo.length > string.length ? memo : string} #returns "Feythelus"
+#print hashlist.my_inject {|memo, string| memo.length > string.length ? memo : string} #returns [1234,"one,two,three,four"]
