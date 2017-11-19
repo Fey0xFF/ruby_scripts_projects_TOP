@@ -1,4 +1,6 @@
 #define custom module
+#these are my versions of common Ruby enumerables that I've written myself
+#they're explicit and can be modified as needed
 module CustomEnum
 
   #my take on .each() returns index based on block based on block condition
